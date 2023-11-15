@@ -51,9 +51,6 @@ public class PromotionCounting {
     public static int[] promotion (int [] before, int [] after) {
 
         int[] result = new int[3];
-        //if changing the original array leads to a bug:
-        // int[] before2 = Arrays.copyOf(before, before.length);
-        // int[] after2 = Arrays.copyOf(after, after.length);
 
         for(int i = after.length - 1; i > 0; i--) {
             result[i-1] = after[i] - before[i];
