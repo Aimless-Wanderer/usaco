@@ -1,7 +1,7 @@
 /*
    ID: aimlesswanderer
    LANG: JAVA
-   TASK: fencepainting
+   TASK: teleportation
  */
 
 import java.io.BufferedReader;
