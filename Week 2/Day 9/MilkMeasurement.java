@@ -4,6 +4,8 @@
    TASK: Milk Measurement
  */
 
+ //ON HOLD: WIll ATTEMPT THIS AGAIN IN THE FUTURE.  RN 3/10
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -13,6 +15,8 @@ import java.io.PrintWriter;
 import java.util.StringTokenizer;
 
 public class MilkMeasurement {
+
+    private static boolean takenDown = false;
     public static void main(String[] args) throws IOException {
 
         BufferedReader reader = new BufferedReader(new FileReader("measurement.in"));
@@ -45,7 +49,7 @@ public class MilkMeasurement {
         int Mildred = 7;
         int difference = 0;
         int currentMax = 0;
-        String[] maxName = new String[3];
+        String[] leaderboard = new String[3];
 
         selectionSort(record);
 
@@ -68,9 +72,12 @@ public class MilkMeasurement {
 
             currentMax = Math.max(Bessie, Math.max(Elsie, Mildred));
 
-            change += leaderboard(currentMax, Bessie, "Bessie", maxName);
-            change += leaderboard(currentMax, Elsie, "Elsie", maxName);
-            change += leaderboard(currentMax, Mildred, "Mildred", maxName);
+            if(findLeaderboard(currentMax, Bessie, "Bessie", leaderboard) + findLeaderboard(currentMax, Elsie, "Elsie", leaderboard) + findLeaderboard(currentMax, Mildred, "Mildred", leaderboard) >= 1){
+                change += 1;
+            } else if (takenDown){
+                takenDown = false;
+                change++;
+            }
 
         }
 
@@ -110,34 +117,41 @@ public class MilkMeasurement {
         }
     }
 
-    public static int leaderboard(int currentMax, int currentCow, String cowName, String[] maxName) {
+    public static int findLeaderboard(int currentMax, int currentCow, String cowName, String[] leaderboard) {
 
         int change = 0;
 
          if(currentMax == currentCow){
                 boolean occupied = false;
-                for(int j = 0; j < maxName.length; j++) {
-                    if(maxName[j] != null) {
-                        if(maxName[j].equals(cowName)) {
+                for(int j = 0; j < leaderboard.length; j++) {
+                    if(leaderboard[j] != null) {
+                        if(leaderboard[j].equals(cowName)) {
                             occupied = true;
                             break;
                         }
                     }
                 }
                 if(!occupied) {
+                    //Another bug is that if more than one change happens in a day it still counts as one change
+                    //I think I've solved this one for now
                     change++;
-                    for(int j = 0; j < maxName.length; j++) {
-                        if(maxName[j] == null) {
-                            maxName[j] = cowName;
+                    for(int j = 0; j < leaderboard.length; j++) {
+                        if(leaderboard[j] == null) {
+                            leaderboard[j] = cowName;
                             break;
                         }
                     } 
                 }
             } else {
-                for(int j = 0; j < maxName.length; j++) {
-                    if(maxName[j] != null) {
-                        if(maxName[j].equals(cowName)) {
-                            maxName[j] = null;
+                for(int j = 0; j < leaderboard.length; j++) {
+                    if(leaderboard[j] != null) {
+                        if(leaderboard[j].equals(cowName)) {
+                            //removing the cow does not count as a change if it is a "swap"
+                            //it however does count as a change if there is more than one cow on the leaderboard
+                            //and it is taken down
+                            //I think I've solved this issue as well
+                            takenDown = true;
+                            leaderboard[j] = null;
                         }
                     }
                 }
