@@ -65,96 +65,13 @@ public class MilkMeasurement {
                 Mildred += difference;
             }
 
-            //the code here is kind of scuffed lol
 
             currentMax = Math.max(Bessie, Math.max(Elsie, Mildred));
-            
-            if(currentMax == Bessie){
-                boolean occupied = false;
-                for(int j = 0; j < maxName.length; j++) {
-                    if(maxName[j] != null) {
-                        if(maxName[j].equals("Bessie")) {
-                            occupied = true;
-                            break;
-                        }
-                    }
-                }
-                if(!occupied) {
-                    change++;
-                    for(int j = 0; j < maxName.length; j++) {
-                        if(maxName[j] == null) {
-                            maxName[j] = "Bessie";
-                            break;
-                        }
-                    } 
-                }
-            } else {
-                for(int j = 0; j < maxName.length; j++) {
-                    if(maxName[j] != null) {
-                        if(maxName[j].equals("Bessie")) {
-                            maxName[j] = null;
-                        }
-                    }
-                }
-            }
 
-            if(currentMax == Elsie){
-                boolean occupied = false;
-                for(int j = 0; j < maxName.length; j++) {
-                    if(maxName[j] != null) {
-                        if(maxName[j].equals("Elsie")) {
-                            occupied = true;
-                            break;
-                        }
-                    }
-                }
-                if(!occupied) {
-                    change++;
-                    for(int j = 0; j < maxName.length; j++) {
-                        if(maxName[j] == null) {
-                            maxName[j] = "Elsie";
-                            break;
-                        }
-                    } 
-                }
-            } else {
-                for(int j = 0; j < maxName.length; j++) {
-                    if(maxName[j] != null) {
-                        if(maxName[j].equals("Elsie")) {
-                            maxName[j] = null;
-                        }
-                    }
-                }
-            }
+            change += leaderboard(currentMax, Bessie, "Bessie", maxName);
+            change += leaderboard(currentMax, Elsie, "Elsie", maxName);
+            change += leaderboard(currentMax, Mildred, "Mildred", maxName);
 
-            if(currentMax == Mildred){
-                boolean occupied = false;
-                for(int j = 0; j < maxName.length; j++) {
-                    if(maxName[j] != null) {
-                        if(maxName[j].equals("Mildred")) {
-                            occupied = true;
-                            break;
-                        }
-                    }
-                }
-                if(!occupied) {
-                    change++;
-                    for(int j = 0; j < maxName.length; j++) {
-                        if(maxName[j] == null) {
-                            maxName[j] = "Mildred";
-                            break;
-                        }
-                    } 
-                }
-            } else {
-                for(int j = 0; j < maxName.length; j++) {
-                    if(maxName[j] != null) {
-                        if(maxName[j].equals("Mildred")) {
-                            maxName[j] = null;
-                        }
-                    }
-                }
-            }
         }
 
         return change;
@@ -193,6 +110,40 @@ public class MilkMeasurement {
         }
     }
 
+    public static int leaderboard(int currentMax, int currentCow, String cowName, String[] maxName) {
 
+        int change = 0;
+
+         if(currentMax == currentCow){
+                boolean occupied = false;
+                for(int j = 0; j < maxName.length; j++) {
+                    if(maxName[j] != null) {
+                        if(maxName[j].equals(cowName)) {
+                            occupied = true;
+                            break;
+                        }
+                    }
+                }
+                if(!occupied) {
+                    change++;
+                    for(int j = 0; j < maxName.length; j++) {
+                        if(maxName[j] == null) {
+                            maxName[j] = cowName;
+                            break;
+                        }
+                    } 
+                }
+            } else {
+                for(int j = 0; j < maxName.length; j++) {
+                    if(maxName[j] != null) {
+                        if(maxName[j].equals(cowName)) {
+                            maxName[j] = null;
+                        }
+                    }
+                }
+            }
+        
+        return change;
+    }
 
 }
