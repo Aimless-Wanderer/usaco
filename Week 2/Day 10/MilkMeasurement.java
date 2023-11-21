@@ -4,8 +4,6 @@
    TASK: Milk Measurement
  */
 
- //ON HOLD: WIll ATTEMPT THIS AGAIN IN THE FUTURE.  RN 3/10
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -15,8 +13,6 @@ import java.io.PrintWriter;
 import java.util.StringTokenizer;
 
 public class MilkMeasurement {
-
-    private static boolean takenDown = false;
     public static void main(String[] args) throws IOException {
 
         BufferedReader reader = new BufferedReader(new FileReader("measurement.in"));
@@ -32,9 +28,6 @@ public class MilkMeasurement {
             record[i][1] = st2.nextToken();
             record[i][2] = st2.nextToken();
         }
-        
-        //Testing
-        //String [][] record = new String [6][3];
 
         writer.println(getChange(record));
         reader.close();
@@ -44,17 +37,20 @@ public class MilkMeasurement {
     public static int getChange(String [][] record) {
 
         int change = 0;
-        int Bessie = 7;
-        int Elsie = 7;
-        int Mildred = 7;
+        int Bessie = 7;  int Elsie = 7;  int Mildred = 7;
+        int Bessie2 = 7;  int Elsie2 = 7;  int Mildred2 = 7;
         int difference = 0;
-        int currentMax = 0;
-        String[] leaderboard = new String[3];
+        int dayTracker = 0;
+        int currentMax = 7;
+        boolean BessieMax, ElsieMax, MildredMax, BessieMax2, ElsieMax2, MildredMax2;
 
         selectionSort(record);
 
         for(int i = 0; i < record.length; i++) {
+
+            //Accumulate all the changes on the same day
             difference = 0;
+
             if(record[i][2].charAt(0) == '+') {
                 difference += Integer.parseInt(record[i][2].substring(1));
             } else {
@@ -62,23 +58,39 @@ public class MilkMeasurement {
             }
 
             if(record[i][1].equals("Bessie")) {
-                Bessie += difference;
+                Bessie2 += difference;
             } else if (record[i][1].equals("Elsie")) {
-                Elsie += difference;
+                Elsie2 += difference;
             } else {
-                Mildred += difference;
+                Mildred2 += difference;
             }
 
+            //Only change on different days
+            if(Integer.parseInt(record[i][0]) != dayTracker) {
 
-            currentMax = Math.max(Bessie, Math.max(Elsie, Mildred));
+                //Keep Track of the top cows from the previous (or start of current day) day and compare them to the current day
+                //The current issue is that I need this to be updated only once on the previous day
+                
+                BessieMax = (Bessie == currentMax ? true : false);
+                ElsieMax = (Elsie == currentMax ? true : false);
+                MildredMax = (Mildred == currentMax ? true : false);
 
-            if(findLeaderboard(currentMax, Bessie, "Bessie", leaderboard) + findLeaderboard(currentMax, Elsie, "Elsie", leaderboard) + findLeaderboard(currentMax, Mildred, "Mildred", leaderboard) >= 1){
-                change += 1;
-            } else if (takenDown){
-                takenDown = false;
-                change++;
+                currentMax = Math.max(Bessie2, Math.max(Elsie2, Mildred2));
+
+                BessieMax2 = (Bessie2 == currentMax ? true : false);
+                ElsieMax2 = (Elsie2 == currentMax ? true : false);
+                MildredMax2 = (Mildred2 == currentMax ? true : false);
+
+                if(BessieMax != BessieMax2 || ElsieMax!= ElsieMax2 || MildredMax!= MildredMax2){
+                    change++;
+                }
+
+                dayTracker = Integer.parseInt(record[i][0]);
+
+                Bessie = Bessie2;
+                Elsie = Elsie2;
+                Mildred = Mildred2;
             }
-
         }
 
         return change;
@@ -116,48 +128,4 @@ public class MilkMeasurement {
             }
         }
     }
-
-    public static int findLeaderboard(int currentMax, int currentCow, String cowName, String[] leaderboard) {
-
-        int change = 0;
-
-         if(currentMax == currentCow){
-                boolean occupied = false;
-                for(int j = 0; j < leaderboard.length; j++) {
-                    if(leaderboard[j] != null) {
-                        if(leaderboard[j].equals(cowName)) {
-                            occupied = true;
-                            break;
-                        }
-                    }
-                }
-                if(!occupied) {
-                    //Another bug is that if more than one change happens in a day it still counts as one change
-                    //I think I've solved this one for now
-                    change++;
-                    for(int j = 0; j < leaderboard.length; j++) {
-                        if(leaderboard[j] == null) {
-                            leaderboard[j] = cowName;
-                            break;
-                        }
-                    } 
-                }
-            } else {
-                for(int j = 0; j < leaderboard.length; j++) {
-                    if(leaderboard[j] != null) {
-                        if(leaderboard[j].equals(cowName)) {
-                            //removing the cow does not count as a change if it is a "swap"
-                            //it however does count as a change if there is more than one cow on the leaderboard
-                            //and it is taken down
-                            //I think I've solved this issue as well
-                            takenDown = true;
-                            leaderboard[j] = null;
-                        }
-                    }
-                }
-            }
-        
-        return change;
-    }
-
 }
