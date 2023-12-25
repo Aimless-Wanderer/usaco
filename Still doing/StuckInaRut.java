@@ -2,10 +2,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class StuckInaRut {
+
+    // Note: the following solution doesn't account for premature stopping
+    // watch following video:
+    // https://starcoder.org/video/usacovideo-usaco-2020-bronze-december-p3/
     public static void main(String[] args) throws IOException {
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -30,11 +33,11 @@ public class StuckInaRut {
 
         for (int i = 0; i < N; i++) {
             if (cowGrid[i].north) {
+                // In order to check and see if a potential "stopper" has been stopped
+                // prematurely by
+                // another cow, search all possible "stoppers" for that cow? "endless recursion"
                 long minNorthDis = Long.MAX_VALUE;
-                // represents the smallest vertical distance from point of intersection
-                // equivalent to min dN --> name is misleading because it is still
-                // distance in the northern direction
-                long minEastDis = Long.MAX_VALUE;
+                long minEastDis = Long.MAX_VALUE; // min dN
                 for (int j = 0; j < N; j++) {
                     if (j != i) {
                         if (cowGrid[j].north) {
