@@ -12,9 +12,9 @@ for i in range (1, num_cows+1):
         greater = True
         if i != j:
             for k in range(len(sessions)):
-                if sessions[k].index(i) < sessions[k].index(j):
+                if sessions[k].index(i) > sessions[k].index(j):
                     greater = False
-        if greater:
-        	consistent_pairs+=1
+            if greater:
+                consistent_pairs+=1
             
-print(int(consistent_pairs/2), file=open("gymnastics.out", "w"))
+print(int(consistent_pairs), file=open("gymnastics.out", "w"))
